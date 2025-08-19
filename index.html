@@ -11,19 +11,42 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#5D5CDE',
-                        'primary-dark': '#4B4BC8',
+                        primary: '#A9CF46',
+                        'primary-dark': '#90b62f',
                         'supersete': '#A9CF46',
-                        'supersete-light': '#BEE854',
-                        'supersete-dark': '#8DBF3B',
-                        'supersete-bg': '#F7FDE8',
+                        'supersete-light': '#b3d55d',
+                        'supersete-dark': '#90b62f',
+                        'supersete-bg': '#f6faeb',
                         'coluna1': '#A9CF46',
-                        'coluna2': '#BEE854', 
-                        'coluna3': '#D4F163',
-                        'coluna4': '#E1F56C',
-                        'coluna5': '#EDF875',
-                        'coluna6': '#F9FC7E',
-                        'coluna7': '#FFFF87'
+                        'coluna2': '#b3d55d', 
+                        'coluna3': '#bdda71',
+                        'coluna4': '#c6e085',
+                        'coluna5': '#d0e59a',
+                        'coluna6': '#d9eaae',
+                        'coluna7': '#e3efc2',
+                        // Escala de cores personalizada Super Sete (Verde-Lima)
+                        'freq-100': '#ffffff',
+                        'freq-95': '#f6faeb',
+                        'freq-90': '#ecf5d6',
+                        'freq-85': '#e3efc2',
+                        'freq-80': '#d9eaae',
+                        'freq-75': '#d0e59a',
+                        'freq-70': '#c6e085',
+                        'freq-65': '#bdda71',
+                        'freq-60': '#b3d55d',
+                        'freq-55': '#aad049',
+                        'freq-54': '#a9cf46',
+                        'freq-50': '#a0cb34',
+                        'freq-45': '#90b62f',
+                        'freq-40': '#80a22a',
+                        'freq-35': '#708e25',
+                        'freq-30': '#607a1f',
+                        'freq-25': '#50651a',
+                        'freq-20': '#405115',
+                        'freq-15': '#303d10',
+                        'freq-10': '#20290a',
+                        'freq-5': '#101405',
+                        'freq-0': '#000000'
                     }
                 }
             }
@@ -35,7 +58,7 @@
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-2">
-                🎯 Super Sete - Análise Profissional
+                🎯 Super Sete - Análise Profissional Completa
             </h1>
             <p class="text-gray-600 dark:text-gray-400">
                 Análise histórica completa do Super Sete - 7 colunas com dígitos de 0 a 9
@@ -52,6 +75,37 @@
                     <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
                 <div id="concursoAtual" class="text-xs text-gray-500 dark:text-gray-400 mt-2"></div>
+                
+                <!-- Estatísticas de Carregamento -->
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                    <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+                        <div class="text-center">
+                            <div id="totalCarregados" class="text-2xl font-bold text-green-600 dark:text-green-400">0</div>
+                            <div class="text-xs text-green-700 dark:text-green-300 font-medium">Carregados</div>
+                        </div>
+                    </div>
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                        <div class="text-center">
+                            <div id="totalErros" class="text-2xl font-bold text-red-600 dark:text-red-400">0</div>
+                            <div class="text-xs text-red-700 dark:text-red-300 font-medium">Erros</div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                        <div class="text-center">
+                            <div id="percentualSucesso" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0%</div>
+                            <div class="text-xs text-blue-700 dark:text-blue-300 font-medium">Taxa Sucesso</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Status Detalhado -->
+                <div class="mt-4 bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                    <div class="text-xs text-gray-600 dark:text-gray-400 text-left">
+                        <div id="statusDetalhado" class="font-mono">
+                            Preparando para iniciar o carregamento completo do Super Sete...
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -72,6 +126,9 @@
                 </button>
                 <button onclick="exportarDados()" class="px-6 py-3 bg-lime-500 hover:bg-lime-600 text-white rounded-lg font-semibold transition-colors">
                     📋 Exportar Análise
+                </button>
+                <button onclick="toggleColunas()" id="btnToggleColunas" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors">
+                    📊 Ocultar Colunas
                 </button>
             </div>
         </div>
@@ -119,13 +176,10 @@
                 <div class="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
                     <div class="flex flex-wrap gap-4 justify-center">
                         <span class="flex items-center">
-                            <span class="inline-block w-4 h-4 bg-red-500 rounded mr-2"></span>Mais frequente
+                            <span class="inline-block w-4 h-4 bg-red-500 rounded mr-2"></span>MAX (mais frequente)
                         </span>
                         <span class="flex items-center">
-                            <span class="inline-block w-4 h-4 bg-yellow-500 rounded mr-2 ml-4"></span>Médio
-                        </span>
-                        <span class="flex items-center">
-                            <span class="inline-block w-4 h-4 bg-blue-500 rounded mr-2 ml-4"></span>Menos frequente
+                            <span class="inline-block w-4 h-4 bg-blue-500 rounded mr-2 ml-4"></span>MIN (menos frequente)
                         </span>
                         <span class="flex items-center">
                             <span class="inline-block w-4 h-4 bg-green-500 rounded mr-2 ml-4"></span>Padrão marcado
@@ -345,9 +399,17 @@
             const statusElement = document.getElementById('loadingStatus');
             const progressBar = document.getElementById('progressBar');
             const concursoAtual = document.getElementById('concursoAtual');
+            const totalCarregadosEl = document.getElementById('totalCarregados');
+            const totalErrosEl = document.getElementById('totalErros');
+            const percentualSucessoEl = document.getElementById('percentualSucesso');
+            const statusDetalhadoEl = document.getElementById('statusDetalhado');
+            
+            let concursosCarregados = 0;
+            let concursosComErro = 0;
             
             try {
                 statusElement.textContent = 'Buscando último concurso...';
+                statusDetalhadoEl.textContent = '🔍 Consultando API da Caixa para obter o número do último concurso do Super Sete...';
                 
                 // Primeiro, buscar o último concurso para saber quantos existem
                 const ultimoResponse = await fetch('https://servicebus2.caixa.gov.br/portaldeloterias/api/supersete');
@@ -357,10 +419,13 @@
                 const totalConcursos = ultimoConcurso.numero;
                 ultimoSorteio = ultimoConcurso.listaDezenas.map(n => parseInt(n));
                 
-                statusElement.textContent = `Carregando ${totalConcursos} concursos...`;
+                statusElement.textContent = `Carregando TODOS os ${totalConcursos} concursos...`;
+                statusDetalhadoEl.textContent = `📊 Último concurso encontrado: ${totalConcursos}. Iniciando carregamento COMPLETO do Super Sete (concurso 1 ao ${totalConcursos}) - Modalidade: 7 colunas com dígitos 0-9...`;
                 todosResultados = [];
                 
-                // Carregar todos os concursos (Super Sete é modalidade nova)
+                // Carregar TODOS os concursos (Super Sete é modalidade nova, então não há muitos)
+                const inicioTempo = Date.now();
+                
                 for (let i = 1; i <= totalConcursos; i++) {
                     try {
                         concursoAtual.textContent = `Concurso ${i} de ${totalConcursos}`;
@@ -384,12 +449,29 @@
                                     valorEstimado: dados.valorEstimadoProximoConcurso || 0,
                                     valorArrecadado: dados.valorArrecadado || 0
                                 });
+                                concursosCarregados++;
+                            } else {
+                                concursosComErro++;
                             }
+                        } else {
+                            concursosComErro++;
                         }
+                        
+                        // Atualizar estatísticas em tempo real
+                        totalCarregadosEl.textContent = concursosCarregados;
+                        totalErrosEl.textContent = concursosComErro;
+                        const percentualAtual = ((concursosCarregados + concursosComErro) / totalConcursos) * 100;
+                        const taxaSucesso = concursosCarregados > 0 ? ((concursosCarregados / (concursosCarregados + concursosComErro)) * 100).toFixed(1) : 0;
+                        percentualSucessoEl.textContent = `${taxaSucesso}%`;
                         
                         // Atualizar barra de progresso
                         const progresso = (i / totalConcursos) * 100;
                         progressBar.style.width = `${progresso}%`;
+                        
+                        // Status detalhado atualizado
+                        const tempoDecorrido = ((Date.now() - inicioTempo) / 1000).toFixed(1);
+                        const velocidade = (concursosCarregados / (Date.now() - inicioTempo) * 1000).toFixed(1);
+                        statusDetalhadoEl.textContent = `⚡ Processando Super Sete... | ⏱️ ${tempoDecorrido}s | 🚀 ${velocidade} concursos/s | ✅ ${concursosCarregados} OK | ❌ ${concursosComErro} Erros | 🎯 7 colunas/10 dígitos`;
                         
                         // Pequeno delay para não sobrecarregar a API
                         if (i % 5 === 0) {
@@ -398,10 +480,18 @@
                         
                     } catch (error) {
                         console.warn(`Erro ao carregar concurso ${i}:`, error);
+                        concursosComErro++;
+                        totalErrosEl.textContent = concursosComErro;
                     }
                 }
                 
+                // Feedback final detalhado
+                const tempoTotal = ((Date.now() - inicioTempo) / 1000).toFixed(1);
+                const taxaSucessoFinal = ((concursosCarregados / totalConcursos) * 100).toFixed(1);
+                
                 statusElement.textContent = 'Processando análises...';
+                statusDetalhadoEl.textContent = `🎯 CARREGAMENTO CONCLUÍDO! | ⏱️ ${tempoTotal}s | ✅ ${concursosCarregados}/${totalConcursos} (${taxaSucessoFinal}%) | Iniciando análises do Super Sete...`;
+                
                 await new Promise(resolve => setTimeout(resolve, 500));
                 
                 // Processar todas as análises
@@ -413,12 +503,18 @@
                 exibirResultados();
                 
                 statusElement.textContent = 'Concluído!';
-                document.getElementById('loadingSection').classList.add('hidden');
-                document.getElementById('controlsSection').classList.remove('hidden');
+                statusDetalhadoEl.textContent = `🏆 ANÁLISE COMPLETA DO SUPER SETE! | ${concursosCarregados} concursos processados | ${sequenciasEncontradas.length} sequências encontradas | Pronto para uso!`;
+                
+                // Mostrar resultado final por 3 segundos antes de ocultar
+                setTimeout(() => {
+                    document.getElementById('loadingSection').classList.add('hidden');
+                    document.getElementById('controlsSection').classList.remove('hidden');
+                }, 3000);
                 
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
                 statusElement.textContent = 'Erro ao carregar dados. Usando dados simulados...';
+                statusDetalhadoEl.textContent = `❌ ERRO na API: ${error.message}. Gerando dados simulados do Super Sete para demonstração...`;
                 gerarDadosSimulados();
                 setTimeout(() => {
                     document.getElementById('loadingSection').classList.add('hidden');
@@ -538,7 +634,7 @@
         }
 
         function exibirResultados() {
-            // Mostrar seções
+            // Mostrar seções - análise de colunas visível por padrão
             document.getElementById('resumoSection').classList.remove('hidden');
             document.getElementById('gradeSection').classList.remove('hidden');
             document.getElementById('colunasSection').classList.remove('hidden');
@@ -556,7 +652,7 @@
             document.getElementById('acumulacoes').textContent = estatisticas.acumulacoes;
             
             // Exibir análises específicas
-            exibirGradeColunas();
+            exibirGradeColunasComEscala();
             exibirAnaliseColunas();
             exibirPadroes();
             exibirPremiacao();
@@ -568,7 +664,7 @@
             document.getElementById('filtroOrdem').addEventListener('change', exibirVisualizacaoTabular);
         }
 
-        function exibirGradeColunas() {
+        function exibirGradeColunasComEscala() {
             const container = document.getElementById('gradeColunas');
             container.innerHTML = '';
             
@@ -588,35 +684,93 @@
                 const freqs = Object.values(frequenciaColunas[col]);
                 const maxFreq = Math.max(...freqs);
                 const minFreq = Math.min(...freqs);
+                const range = maxFreq - minFreq;
                 
                 // Dígitos 0-9 desta coluna
                 for (let digito = 0; digito <= 9; digito++) {
                     const freq = frequenciaColunas[col][digito];
                     const div = document.createElement('div');
-                    div.className = 'relative p-2 rounded border text-center cursor-pointer transition-all hover:scale-105';
+                    div.className = 'relative p-2 rounded border-2 text-center cursor-pointer transition-all hover:scale-105 hover:shadow-lg';
                     
-                    // Determinar cor baseada na frequência
-                    let corFundo = '';
-                    if (freq === maxFreq) {
-                        corFundo = 'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700';
-                    } else if (freq === minFreq) {
-                        corFundo = 'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700';
-                    } else {
-                        corFundo = 'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700';
-                    }
+                    // Calcular posição na escala (0-100%)
+                    const posicaoEscala = range > 0 ? ((freq - minFreq) / range) * 100 : 50;
+                    
+                    // Mapear para a escala de cores personalizada VERDE-LIMA
+                    let corFundo = '#ffffff'; // default
+                    let corBorda = '#e5e7eb'; // default
+                    let corTexto = 'text-gray-800 dark:text-white';
                     
                     // Verificar se faz parte do último sorteio
                     if (ultimoSorteio[col - 1] === digito) {
-                        corFundo = 'bg-purple-100 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700';
+                        corFundo = '#8B5CF6'; // roxo para último sorteio
+                        corTexto = 'text-white';
+                        corBorda = '#7C3AED';
+                    } else if (posicaoEscala >= 95) {
+                        corFundo = '#101405'; // freq-5
+                        corTexto = 'text-white';
+                        corBorda = '#20290a';
+                    } else if (posicaoEscala >= 85) {
+                        corFundo = '#20290a'; // freq-10
+                        corTexto = 'text-white';
+                        corBorda = '#303d10';
+                    } else if (posicaoEscala >= 75) {
+                        corFundo = '#303d10'; // freq-15
+                        corTexto = 'text-white';
+                        corBorda = '#405115';
+                    } else if (posicaoEscala >= 65) {
+                        corFundo = '#405115'; // freq-20
+                        corTexto = 'text-white';
+                        corBorda = '#50651a';
+                    } else if (posicaoEscala >= 55) {
+                        corFundo = '#50651a'; // freq-25
+                        corTexto = 'text-white';
+                        corBorda = '#607a1f';
+                    } else if (posicaoEscala >= 50) {
+                        corFundo = '#A9CF46'; // cor principal Super Sete
+                        corTexto = 'text-white';
+                        corBorda = '#90b62f';
+                    } else if (posicaoEscala >= 40) {
+                        corFundo = '#90b62f'; // freq-45
+                        corTexto = 'text-white';
+                        corBorda = '#80a22a';
+                    } else if (posicaoEscala >= 30) {
+                        corFundo = '#aad049'; // freq-55
+                        corTexto = 'text-gray-800';
+                        corBorda = '#a0cb34';
+                    } else if (posicaoEscala >= 20) {
+                        corFundo = '#c6e085'; // freq-70
+                        corTexto = 'text-gray-800';
+                        corBorda = '#bdda71';
+                    } else if (posicaoEscala >= 10) {
+                        corFundo = '#e3efc2'; // freq-85
+                        corTexto = 'text-gray-800';
+                        corBorda = '#d9eaae';
+                    } else {
+                        corFundo = '#f6faeb'; // freq-95
+                        corTexto = 'text-gray-800';
+                        corBorda = '#ecf5d6';
                     }
                     
-                    div.className += ` ${corFundo}`;
+                    div.style.backgroundColor = corFundo;
+                    div.style.borderColor = corBorda;
+                    div.className += ` ${corTexto}`;
                     div.id = `digito-${col}-${digito}`;
                     
+                    // Adicionar badge de posição
+                    let badgeTexto = '';
+                    if (freq === maxFreq) {
+                        badgeTexto = '<span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full">MAX</span>';
+                    } else if (freq === minFreq) {
+                        badgeTexto = '<span class="absolute -top-1 -right-1 bg-blue-500 text-white text-xs px-1 py-0.5 rounded-full">MIN</span>';
+                    } else if (ultimoSorteio[col - 1] === digito) {
+                        badgeTexto = '<span class="absolute -top-1 -right-1 bg-purple-500 text-white text-xs px-1 py-0.5 rounded-full">LAST</span>';
+                    }
+                    
                     div.innerHTML = `
-                        <div class="font-bold text-lg text-gray-800 dark:text-white">${digito}</div>
-                        <div class="text-xs text-gray-600 dark:text-gray-400">${freq}x</div>
-                        ${ultimoSorteio[col - 1] === digito ? '<div class="text-xs text-purple-600 dark:text-purple-400 font-bold">ÚLTIMO</div>' : ''}
+                        ${badgeTexto}
+                        <div class="font-bold text-lg">${digito}</div>
+                        <div class="text-xs opacity-75">${freq}x</div>
+                        <div class="text-xs opacity-60 mt-1">Pos: ${posicaoEscala.toFixed(0)}%</div>
                     `;
                     
                     divColuna.appendChild(div);
@@ -827,7 +981,8 @@
             
             const coresColunas = ['bg-coluna1', 'bg-coluna2', 'bg-coluna3', 'bg-coluna4', 'bg-coluna5', 'bg-coluna6', 'bg-coluna7'];
             
-            resultadosOrdenados.slice(0, 100).forEach((resultado, index) => {
+            // Mostrar TODOS os resultados (sem limitação)
+            resultadosOrdenados.forEach((resultado, index) => {
                 const sequencias = encontrarSequenciasDigitos(resultado.digitos);
                 
                 // Encontrar repetições do concurso anterior
@@ -941,7 +1096,7 @@
                                     <p class="text-sm opacity-90">${resultado.local || 'SÃO PAULO, SP'}</p>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-xs opacity-75">Super Sete</div>
+                                    <div class="text-xs opacity-75">Super Sete (7 colunas)</div>
                                     <div class="text-sm font-semibold">${resultado.acumulado ? '🔴 ACUMULOU' : `✅ ${ganhador7 ? ganhador7.numeroDeGanhadores : 0} ganhador(es)`}</div>
                                 </div>
                             </div>
@@ -1040,6 +1195,23 @@
             });
         }
 
+        function toggleColunas() {
+            const section = document.getElementById('colunasSection');
+            const btn = document.getElementById('btnToggleColunas');
+            
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                btn.textContent = '📊 Ocultar Colunas';
+                btn.className = 'px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors';
+                showNotification('📊 Seção de colunas exibida!', 'info');
+            } else {
+                section.classList.add('hidden');
+                btn.textContent = '📊 Mostrar Colunas';
+                btn.className = 'px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-semibold transition-colors';
+                showNotification('➖ Seção de colunas ocultada!', 'info');
+            }
+        }
+
         function marcarPadroes() {
             padroesmarcados = [];
             
@@ -1056,8 +1228,12 @@
                 for (let digito = 0; digito <= 9; digito++) {
                     const elemento = document.getElementById(`digito-${col}-${digito}`);
                     if (elemento && padroesmarcados.includes(digito)) {
-                        elemento.className = elemento.className.replace(/bg-(red|yellow|blue|purple)-100.*?border-(red|yellow|blue|purple)-300.*?/g, '');
-                        elemento.className += ' bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700';
+                        // Manter a cor de sequência verde
+                        if (ultimoSorteio[col - 1] !== digito) {
+                            elemento.style.backgroundColor = '#10b981';
+                            elemento.style.borderColor = '#059669';
+                            elemento.className = elemento.className.replace(/text-\w+-\w+/, 'text-white');
+                        }
                     }
                 }
             }
@@ -1067,7 +1243,6 @@
 
         function analisarColunas() {
             showNotification('🔍 Análise por colunas em andamento...', 'info');
-            // Aqui poderia implementar análises mais avançadas
             setTimeout(() => {
                 showNotification('✅ Análise por colunas concluída!', 'success');
             }, 1000);
@@ -1075,7 +1250,7 @@
 
         function resetarMarcacoes() {
             padroesmarcados = [];
-            exibirGradeColunas();
+            exibirGradeColunasComEscala();
             showNotification('🔄 Marcações resetadas!', 'info');
         }
 
@@ -1119,9 +1294,9 @@
         }
 
         function recarregarDados() {
-            if (showConfirmDialog('Deseja recarregar todos os dados? Isso pode levar alguns minutos.', () => {
+            showConfirmDialog('Deseja recarregar todos os dados? Isso pode levar alguns minutos.', () => {
                 location.reload();
-            })) {}
+            });
         }
 
         function gerarDadosSimulados() {
@@ -1149,6 +1324,8 @@
                 });
             }
             
+            ultimoSorteio = todosResultados[todosResultados.length - 1].digitos;
+            
             // Processar análises com dados simulados
             analisarFrequencias();
             analisarSequencias();
@@ -1163,7 +1340,7 @@
                     <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
                     <div class="flex justify-end space-x-3">
                         <button class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded" onclick="this.closest('.fixed').remove()">Cancelar</button>
-                        <button class="px-4 py-2 bg-supersete text-white hover:bg-supersete-dark rounded" onclick="this.closest('.fixed').remove(); (${onConfirm})()">Confirmar</button>
+                        <button class="px-4 py-2 bg-supersete text-white hover:bg-supersete-dark rounded" onclick="this.closest('.fixed').remove(); onConfirm()">Confirmar</button>
                     </div>
                 </div>
             `;
@@ -1175,7 +1352,8 @@
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
                 type === 'success' ? 'bg-green-500' : 
-                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                type === 'error' ? 'bg-red-500' : 
+                type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
             } text-white`;
             notification.textContent = message;
             
